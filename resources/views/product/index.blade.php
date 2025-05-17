@@ -28,7 +28,14 @@
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->price }}</td>
                 <td>{{ $row->quantity }}</td>
-                <td>action</td>
+                <td>
+                    <a href="{{ route('products.edit', $row->id) }}">edit</a>
+                    <form action="{{ route('products.destroy', $row->id) }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
         @endforeach
 

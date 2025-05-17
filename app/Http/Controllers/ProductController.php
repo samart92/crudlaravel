@@ -49,7 +49,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::find($id);
+        return view('product.edit', ['data' => $product]);
     }
 
     /**
@@ -65,6 +66,9 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //dd($id);
+        $product = Product::find($id);
+        $product->delete();
+        return redirect()->route("products.index");
     }
 }
