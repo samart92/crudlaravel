@@ -20,6 +20,7 @@
             <td>name</td>
             <td>price</td>
             <td>Quantity</td>
+            <td>photo</td>
             <td>action</td>
         </tr>
         @foreach ($data as $row)
@@ -28,6 +29,10 @@
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->price }}</td>
                 <td>{{ $row->quantity }}</td>
+                <td>
+                    <img src="{{ Storage::url($row->photo) }}" alt="" width="150">
+
+                </td>
                 <td>
                     <a href="{{ route('products.edit', $row->id) }}">edit</a>
                     <form action="{{ route('products.destroy', $row->id) }}" method="post">

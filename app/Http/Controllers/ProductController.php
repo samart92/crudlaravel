@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductController extends Controller
 {
@@ -27,11 +29,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->proName);
+
+        //add photo to photo folder
+        $photo = $request->file('poto')->store('public/photos');
+
         Product::create([
             'name' => $request->proName,
             'price' => $request->price,
-            'quantity' => $request->quatity
+            'quantity' => $request->quatity,
+            'photo' => $photo
         ]);
         return redirect()->route("products.index");
     }
@@ -58,7 +64,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $product = Product::find($id);
+        //for photo
+        if ($request->hasFile('photo')) {
+            Storage::delete($product->photo);
+            $photo = $request->file('photo')->store('public/photos');
+        } else {
+            $photo = $product->photo;
+        }
+
+        // dd($request->all(), $id);
+
+        $product->name = $request->proName;
+        $product->price = $request->price;
+        $product->quantity = $request->quatity;
+        $product->photo = $photo;
+        $product->save();
+        return redirect()->route('products.index');
     }
 
     /**
@@ -69,6 +91,7 @@ class ProductController extends Controller
         //dd($id);
         $product = Product::find($id);
         $product->delete();
+        Storage::delete($product->photo);
         return redirect()->route("products.index");
     }
 }
